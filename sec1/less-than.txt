@@ -1,0 +1,9 @@
+Syntax: 
+  e1 < e2 where e1 and e2 are int
+
+Type-checking:
+  e1 and e2 must be type int and the result of the expression must be type bool.
+
+Evaluation:
+  if the value of e1 is less than the value of e2, the value of the expression will be true; 
+  otherwise it will be false. 
