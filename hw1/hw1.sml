@@ -80,59 +80,30 @@ fun oldest(date_xs : (int * int * int) list) =
 			else tl_oldest
 		end
 
-fun number_in_months_challenge(date_xs : (int * int * int) list, m_xs : int list) = 
-	let 
-		fun number_in_month_challenge(date_xs : (int * int * int) list, m : int) = 
-			let
-				fun inner_func(date_xs : (int * int * int) list) = 
-					if null date_xs
-					then 0
-					else 
-						let
-							val hd_m = month (hd date_xs)
-							val tl_res = inner_func(tl date_xs)
-						in
-							if m = hd_m then 1 + tl_res else tl_res
-						end
-			in
-				inner_func(date_xs)
-			end
-
-		fun inner_func(m_xs : int list) = 
-			if null m_xs
-			then 0
-			else
-				number_in_month_challenge(date_xs, hd m_xs) + inner_func(tl m_xs)
+fun remove_dup(xs : int list) = 
+	let
+		fun is_in(num : int, xs : int list) = 
+			if null xs 
+			then false
+			else num = hd xs orelse is_in(num, tl xs)
 	in
-		inner_func(m_xs)
+		if null xs
+		then []
+		else 
+			let 
+				val tl_res = remove_dup(tl xs)
+			in
+				if is_in(hd xs, tl_res) 
+				then tl_res
+				else (hd xs) :: tl_res
+			end
 	end
+
+fun number_in_months_challenge(date_xs : (int * int * int) list, m_xs : int list) = 
+	number_in_months(date_xs, remove_dup(m_xs))
 
 fun dates_in_months_challenge(date_xs : (int * int * int) list, m_xs : int list) = 
-	let
-		fun dates_in_month_challenge(date_xs : (int * int * int) list, m : int) = 
-			let
-				fun inner_func(date_xs : (int * int * int) list) = 
-					if null date_xs 
-					then []
-					else 
-						let
-							val hd_date = hd date_xs
-						in
-							if m = month hd_date 
-							then hd_date :: inner_func(tl date_xs)
-							else inner_func(tl date_xs)
-						end
-			in
-				inner_func(date_xs)
-			end
-
-		fun inner_func(m_xs : int list) = 
-			if null m_xs 
-			then [] 
-			else dates_in_month_challenge(date_xs, hd m_xs) @ inner_func(tl m_xs)
-	in
-		inner_func(m_xs)
-	end
+	dates_in_months(date_xs, remove_dup(m_xs))
 
 fun reasonable_date(date : (int * int * int)) = 
 	let
