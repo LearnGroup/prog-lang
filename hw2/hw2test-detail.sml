@@ -84,3 +84,37 @@ val test54 = officiate([(Clubs,Ace),(Spades,Ace),(Clubs,Ace),(Spades,Num 7)],
                        42)
              = 21 
 
+val test60 = sum_cards_challenge([(Clubs, Ace),(Clubs, Ace),(Clubs, Num 2)]) = [24, 14, 4]
+val test61 = sum_cards_challenge([]) = [0]
+val test62 = sum_cards_challenge([(Clubs, Ace),(Clubs, Num 2)]) = [13, 3]
+val test63 = sum_cards_challenge([(Clubs, King),(Clubs, Num 2)]) = [12]
+val test64 = sum_cards_challenge([(Clubs, Queen),(Clubs, Ace),(Clubs, Ace),(Clubs, Ace)]) = [43, 33, 23, 13]
+
+val test65 = score_challenge([(Hearts, Num 2),(Clubs, Ace)],10) = 7
+val test66 = score_challenge([(Hearts, Num 10),(Clubs, Num 4)],10) = 12
+val test67 = score_challenge([(Hearts, Num 10),(Diamonds, Num 4)],10) = 6
+val test68 = score_challenge([(Hearts, Num 10),(Hearts, Ace)],10) = 1 
+val test69 = score_challenge([(Hearts, Num 6),(Hearts, Ace)],10) = 1 
+
+val test70 = officiate_challenge([(Hearts, Num 2),(Clubs, Num 4)],[Draw], 15) = 6
+
+val test71 = officiate_challenge([(Clubs,Ace),(Spades,Ace),(Clubs,Ace),(Spades,Ace)],
+                       [Draw,Draw,Draw,Draw,Draw],
+                       3)
+             = 1
+
+val test72 = ((officiate_challenge([(Clubs,Jack),(Spades,Num(8))],
+                         [Draw,Discard(Hearts,Jack)],
+                         42);
+               false) 
+              handle IllegalMove => true)
+
+val test73 = officiate_challenge([(Clubs,Ace),(Spades,Ace),(Clubs,Ace),(Spades,Ace)],
+                       [Draw,Draw,Draw,Draw,Discard(Clubs,Ace),Discard(Spades,Ace),Discard(Clubs,Ace),Discard(Spades,Ace)],
+                       42)
+             = 21
+
+val test74 = officiate_challenge([(Clubs,Ace),(Spades,Ace),(Clubs,Ace),(Spades,Num 7)],
+                       [Draw,Draw,Draw,Draw,Discard(Clubs,Ace),Discard(Spades,Ace),Discard(Clubs,Ace),Discard(Spades,Num 7)],
+                       42)
+             = 21 

@@ -124,12 +124,54 @@ fun officiate(cs, mvs, goal) =
         score(play([], cs, mvs), goal)
     end
 
+(* card list -> int list *)
+fun sum_cards_challenge cs =
+    let fun aux(cs) = 
+        case cs of
+            [] => [0]
+          | c::css => case c of
+                          (_, Ace) => sum_cards(cs)::(map (fn x => x + 1) (sum_cards_challenge(css)))
+                        | _ => (map (fn x => x + card_value(c)) (sum_cards_challenge(css)))
+    in
+        aux(cs)
+    end
 
+fun score_challenge(cs, goal) = 
+    let
+        exception UnExpectedException
+        fun list_min (ss) = 
+            case ss of
+                [] => raise UnExpectedException
+              | s::[] => s
+              | s::sss => Int.min(s, list_min(sss))
+        val score = list_min (map (fn sum => if sum > goal 
+                                              then 3 * (sum - goal) 
+                                              else (goal - sum)) 
+                                   (sum_cards_challenge(cs)))
+    in
+        if all_same_color(cs) then score div 2 else score
+    end
 
-
-
-
-
+fun officiate_challenge(cs, mvs, goal) = 
+    let fun sum_cards_one(cs) = 
+            case cs of
+                [] => 0
+              | c::css => case c of
+                              (_, Ace) => 1 + sum_cards_one(css)
+                            | _ => card_value(c) + sum_cards_one(css)
+        fun play(held_cs, cs_left, mvs_left) = 
+            case mvs_left of
+                [] => held_cs
+              | Discard c::tl_mvs => 
+                    play(remove_card(held_cs, c, IllegalMove), cs_left, tl_mvs)
+              | Draw::tl_mvs => case cs_left of
+                                    [] => held_cs
+                                  | c::css => if sum_cards_one(c::held_cs) > goal
+                                              then c::held_cs
+                                              else play(c::held_cs, css, tl_mvs)
+    in
+        score_challenge(play([], cs, mvs), goal)
+    end
 
 
 
