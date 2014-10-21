@@ -82,6 +82,7 @@ val check_pat =
             case p of
                 Variable v => [v]
               | TupleP ps => foldl (fn (p, acc) => all_variables p @ acc) [] ps
+              | ConstructorP (s1, p) => all_variables p
               | _ => []
 
         fun no_dup xs = case xs of
@@ -101,7 +102,7 @@ fun match (v, p) =
                          Const y => if x = y then SOME [] else NONE
                        | _ => NONE)
       | TupleP ps => (case v of 
-                          Tuple vs => all_answers (fn x => match x) (ListPair.zip (vs, ps))
+                          Tuple vs => ((all_answers (fn x => match x) (ListPair.zipEq (vs, ps))) handle UnequalLengths => NONE)
                         | _ => NONE)
       | ConstructorP (s1, p) => (case v of 
                                      Constructor (s2, v) => if s1 = s2 then match (v, p) else NONE
